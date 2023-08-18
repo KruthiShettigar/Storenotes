@@ -1,0 +1,67 @@
+import os
+import json
+
+# Define the file to store notes
+notes_file = 'notes.json'
+
+def load_notes():
+    if os.path.exists(notes_file):
+        with open(notes_file, 'r') as f:
+            notes = json.load(f)
+            return notes
+    else:
+        return []
+
+def save_notes(notes):
+    with open(notes_file, 'w') as f:
+        json.dump(notes, f)
+
+def list_notes(notes):
+    if notes:
+        print("Your Notes:")
+        for i, note in enumerate(notes):
+            print(f"{i + 1}. {note}")
+    else:
+        print("You have no notes.")
+
+def add_note(notes, note):
+    notes.append(note)
+    save_notes(notes)
+    print("Note added successfully!")
+
+def remove_note(notes, index):
+    if 0 <= index < len(notes):
+        removed_note = notes.pop(index)
+        save_notes(notes)
+        print(f"Note '{removed_note}' removed successfully!")
+    else:
+        print("Invalid note index.")
+
+def main():
+    notes = load_notes()
+
+    while True:
+        print("\nOptions:")
+        print("1. List Notes")
+        print("2. Add Note")
+        print("3. Remove Note")
+        print("4. Quit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            list_notes(notes)
+        elif choice == '2':
+            note = input("Enter your note: ")
+            add_note(notes, note)
+        elif choice == '3':
+            list_notes(notes)
+            index = int(input("Enter the index of the note to remove: ")) - 1
+            remove_note(notes, index)
+        elif choice == '4':
+            break
+        else:
+            print("Invalid choice. Please select again.")
+
+if __name__ == "__main__":
+    main()
